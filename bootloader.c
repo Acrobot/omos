@@ -1,9 +1,13 @@
+#include <stdbool.h>
+
 #include <efi.h>
 #include <efilib.h>
 
-#include <stdbool.h>
+#include "serial.h"
 
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+   init_serial();
+   
    InitializeLib(ImageHandle, SystemTable);
    
    // Clear screen
