@@ -28,8 +28,14 @@ all: disk.img
 serial-loader.o: serial.c
 	$(CC) $(CFLAGS) -fpic -c -o $@ $^
 
-loader.so: bootloader.o serial-loader.o
+loader.so: bootloader.o serial-loader.o kernel/memory_map.o logging/efi_log.o
 	ld $(LDFLAGS) $^ -o $@ -lefi -lgnuefi
+	
+kernel.elf.img: serial.o kernel/kernel.o
+	ld -T kernel.ld -o $@ $^
+
+kernel.img: kernel.elf.img
+	objcopy -O binary $^ $@
 
 %.efi: %.so
 	objcopy -j .text -j .sdata -j .data -j .dynamic \
