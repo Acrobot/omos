@@ -3,20 +3,14 @@ SECTIONS
 	/* Start putting sections at 1MiB, conventional place for bootloaders */
 	. = 1M;
 
-	.text BLOCK(4K) : ALIGN(4K)
+	.text :
 	{
 		*(.head)
 		*(.text)
 	}
 
-	/* Read-only data. */
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
-	}
-
 	/* Read-write data (initialized) */
-	.data BLOCK(4K) : ALIGN(4K)
+	.data : ALIGN(0x1000)
 	{
 		*(.data)
 	}
@@ -25,6 +19,6 @@ SECTIONS
 	{
 		*(.stack)
 		*(.bss)
-		_kernel_end = .;
+		_kernel0_end = .;
 	}
 }

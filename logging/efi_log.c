@@ -13,7 +13,7 @@ void print_status(EFI_STATUS status) {
     #undef CASE
 }
 
-void log(const wchar_t *component, const wchar_t *message) {
+void log_message(const wchar_t *component, const wchar_t *message) {
     Print(L"%s: %s\r\n", component, message);
 }
 
