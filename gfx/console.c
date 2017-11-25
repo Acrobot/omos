@@ -25,6 +25,16 @@ static int console_height;
 static int console_x = 0;
 static int console_y = 0;
 
+void put_pixel(unsigned x, unsigned y, uint32_t px);
+
+void clear_screen() {
+    for (unsigned x = 0; x < _framebuffer->width; ++x) {
+        for (unsigned y = 0; y < _framebuffer->height; ++y) {
+            put_pixel(x, y, 0x00000000);
+        }
+    }
+}
+
 void console_init(framebuffer *framebuffer) {
 	_framebuffer = framebuffer;
         
@@ -34,6 +44,8 @@ void console_init(framebuffer *framebuffer) {
 
 	console_width = framebuffer->width / FONT_CHAR_WIDTH;
 	console_height = framebuffer->height / FONT_CHAR_HEIGHT;
+        
+        clear_screen();
 }
 
 static uint32_t encode_pixel(int x, int y) {
