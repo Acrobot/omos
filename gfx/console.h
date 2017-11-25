@@ -5,6 +5,7 @@
 
 void console_init(framebuffer *framebuffer);
 void console_print(const char *message);
+void console_println(const char *message);
 
 #endif /* CONSOLE_H */
 
