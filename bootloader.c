@@ -6,6 +6,7 @@
 #include "serial.h"
 #include "logging/efi_log.h"
 #include "kernel/kernel.h"
+#include "kernel/paging.h"
 #include "kernel/memory_map.h"
 #include "stdlib.h"
 
@@ -23,11 +24,11 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
     kernel_params init_parameters;
     
+    init_parameters.efi_runtime_services = RT;
     initialize_framebuffer(&init_parameters.framebuffer);
     Print(L"Initialized framebuffer!\r\n");
     
     fill_memory_map(&init_parameters.efi_memory_map);
-    
     // Printing (or using any UEFI functions touching memory) will invalidate
     // the memory map key. Just don't.
 
@@ -49,6 +50,7 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     size_t kernel_img_size = ((size_t) &_binary_kernel_img_end) - ((size_t) kernel_img);
     
     serial_print("Starting kernel\r\n");
+    
     serial_print_ptr(kernel_base);
     serial_print_ptr(&init_parameters);
     

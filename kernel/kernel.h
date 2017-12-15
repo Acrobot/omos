@@ -4,11 +4,13 @@
 #include "memory_map.h"
 
 /* Start of kernel sections in memory, synced with kernel.ld */
-const long KERNEL_START = 1 * 1024 * 1024;
+#define KERNEL_START (1 * 1024 * 1024)
+#define FRAMEBUFFER_START (KERNEL_START + 0x40000000)
 
 typedef struct {
     const EFI_HANDLE image_handle;
     EFI_MEMORY_MAP efi_memory_map;
+    EFI_RUNTIME_SERVICES *efi_runtime_services;
     framebuffer framebuffer;
 } kernel_params;
 

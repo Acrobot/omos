@@ -240,13 +240,11 @@ void serial_print_mem(const void *mem, int n)
         if(i) serial_print(":");
         serial_print_hex(memc[i]);
     }
-    serial_print("\r\n");
 }
 
 void serial_print_ptr(void *ptr)
 {
     serial_print_hex((uint64_t) ptr);
-    serial_print("\r\n");
 }
 
 void serial_print_bits(uint64_t value)

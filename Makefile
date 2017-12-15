@@ -30,7 +30,7 @@ fontppm.o: gfx/font.ppm
 serial-loader.o: serial.c
 	$(CC) $(CFLAGS) -fpic -c -o $@ $^
 
-loader.so: bootloader.o stdlib.o serial-loader.o kernel/memory_map.o logging/efi_log.o kernelimg.o
+loader.so: bootloader.o stdlib.o serial-loader.o kernel/memory_map.o kernel/paging.o logging/efi_log.o kernelimg.o
 	ld $(LDFLAGS) $^ -o $@ -lefi -lgnuefi
 	
 kernel.elf.img: omos.o serial.o omos_kernel.o fontppm.o gfx/console.o
