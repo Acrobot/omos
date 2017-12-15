@@ -12,7 +12,7 @@ EFI_LDS         = $(EFILIB)/elf_$(ARCH)_efi.lds
 CC		= /usr/bin/clang
 CFLAGS          = -O0 -xc -std=gnu11 -fno-stack-protector -fshort-wchar -mno-red-zone -Wall -Wextra -pedantic-errors \
 		  -DGNU_EFI_USE_MS_ABI -DGNU_EFI_USE_EXTERNAL_STDARG -fPIC
-
+CFLAGS-lower_kernel.o		+= -mcmodel=large
 CFLAGS		+= $(CFLAGS-$@) $(EFIINCS)
 
 ifeq ($(ARCH),x86_64)
@@ -30,16 +30,25 @@ fontppm.o: gfx/font.ppm
 serial-loader.o: serial.c
 	$(CC) $(CFLAGS) -fpic -c -o $@ $^
 
-loader.so: bootloader.o stdlib.o serial-loader.o kernel/memory_map.o kernel/paging.o logging/efi_log.o kernelimg.o
+loader.so: bootloader.o stdlib.o serial-loader.o kernel/memory_map.o logging/efi_log.o lower_kernelimg.o
 	ld $(LDFLAGS) $^ -o $@ -lefi -lgnuefi
 	
-kernel.elf.img: omos.o serial.o omos_kernel.o fontppm.o gfx/console.o
+omos_kernel.elf.img: omos_krnl.o omos_kernel.o serial.o kernel/paging.o gfx/console.o fontppm.o
 	ld -T kernel/kernel.ld -o $@ $^
 
-kernel.img: kernel.elf.img
+omos_kernel.img: omos_kernel.elf.img
 	objcopy -O binary $^ $@
 	
-kernelimg.o: kernel.img
+omos_kernelimg.o: omos_kernel.img
+	objcopy -I binary -O elf64-x86-64 -B i386 $^ $@
+	
+lower_kernel.elf.img: lower_krnl.o lower_kernel.o serial.o kernel/paging.o omos_kernelimg.o
+	ld -T lower_kernel.ld -o $@ $^
+
+lower_kernel.img: lower_kernel.elf.img
+	objcopy -O binary $^ $@
+	
+lower_kernelimg.o: lower_kernel.img
 	objcopy -I binary -O elf64-x86-64 -B i386 $^ $@
 
 %.efi: %.so
@@ -48,8 +57,8 @@ kernelimg.o: kernel.img
 		--target=efi-app-$(ARCH) $^ $@
 
 disk.img: loader.efi
-	dd if=/dev/zero of=$@ bs=1k count=1440
-	mformat -i $@ -f 1440 ::
+	dd if=/dev/zero of=$@ bs=1k count=2880
+	mformat -i $@ -f 2880 ::
 	mmd -i $@ ::/EFI
 	mmd -i $@ ::/EFI/BOOT
 	mcopy -i $@ $^ ::/EFI/BOOT/BOOTx64.EFI

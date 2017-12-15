@@ -1,24 +1,21 @@
 SECTIONS
 {
-	/* Start putting sections at 1MiB, conventional place for bootloaders */
-	. = 1M;
+	. = 0xffff800000000000;
 
 	.text :
 	{
-		*(.head)
+		*(.head1)
 		*(.text)
 	}
 
-	/* Read-write data (initialized) */
-	.data : ALIGN(0x1000)
+	.data :
 	{
 		*(.data)
 	}
 
 	.bss :
 	{
-		*(.stack)
+		*(.stack1)
 		*(.bss)
-		_kernel0_end = .;
 	}
 }

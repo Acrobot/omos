@@ -4,6 +4,7 @@
 #include <wchar.h>
 
 #include <efi.h>
+#include <efilib.h>
 
 void print_status(EFI_STATUS status);
 void log_message(const wchar_t *component, const wchar_t *message);

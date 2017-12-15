@@ -20,7 +20,7 @@ typedef struct {
 
 _Static_assert(sizeof(linear_address) == sizeof(uint64_t), "linear address has to have 64 bits");
 
-void enable_paging(EFI_MEMORY_MAP *memory_map, framebuffer *fb);
+void enable_paging(void *omos_kernel, EFI_MEMORY_MAP *memory_map, framebuffer *fb);
 
 #endif /* PAGING_H */
 

@@ -1,6 +1,6 @@
 .section .head
 mov $stack_top, %rsp
-call kernel_main
+call start_omos_kernel
 ret
 
 .section .stack

@@ -10,8 +10,8 @@
 #include "kernel/memory_map.h"
 #include "stdlib.h"
 
-extern char _binary_kernel_img_start;
-extern char _binary_kernel_img_end;
+extern char _binary_lower_kernel_img_start;
+extern char _binary_lower_kernel_img_end;
 
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     init_serial();
@@ -46,8 +46,8 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     }
     
     void *kernel_base = (void *) KERNEL_START;
-    const void *kernel_img = (const void *) &_binary_kernel_img_start;
-    size_t kernel_img_size = ((size_t) &_binary_kernel_img_end) - ((size_t) kernel_img);
+    const void *kernel_img = (const void *) &_binary_lower_kernel_img_start;
+    size_t kernel_img_size = ((size_t) &_binary_lower_kernel_img_end) - ((size_t) kernel_img);
     
     serial_print("Starting kernel\r\n");
     

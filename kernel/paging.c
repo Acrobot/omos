@@ -184,9 +184,12 @@ static inline void map_framebuffer(framebuffer *fb) {
     map_memory(FRAMEBUFFER_START, (uint64_t) framebuffer_base, fb->size / PAGE_SIZE + 1);
 }
 
-void enable_paging(EFI_MEMORY_MAP *memory_map, framebuffer *fb) {
+void enable_paging(void *omos_kernel, EFI_MEMORY_MAP *memory_map, framebuffer *fb) {
     map_memory(KERNEL_START, KERNEL_START, 256);
     serial_print("mapped kernel\r\n");
+    
+    map_memory(KERNEL_VIRTUAL_BASE, (uint64_t) omos_kernel, 256);
+    serial_print("mapped omos kernel\r\n");
     
     map_efi(memory_map);
     serial_print("mapped efi\r\n");

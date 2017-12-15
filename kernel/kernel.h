@@ -3,9 +3,12 @@
 
 #include "memory_map.h"
 
-/* Start of kernel sections in memory, synced with kernel.ld */
+/* Start of kernel sections in memory, synced with lower_kernel.ld */
 #define KERNEL_START (1 * 1024 * 1024)
-#define FRAMEBUFFER_START (KERNEL_START + 0x40000000)
+
+#define KERNEL_VIRTUAL_BASE 0xffff800000000000 // sync with omos_kernel.ld
+#define EFI_VIRTUAL_BASE (KERNEL_VIRTUAL_BASE + 0x40000000)
+#define FRAMEBUFFER_START (EFI_VIRTUAL_BASE + 0x40000000)
 
 typedef struct {
     const EFI_HANDLE image_handle;
