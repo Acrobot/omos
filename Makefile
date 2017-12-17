@@ -33,7 +33,10 @@ serial-loader.o: serial.c
 loader.so: bootloader.o stdlib.o serial-loader.o kernel/memory_map.o logging/efi_log.o lower_kernelimg.o
 	ld $(LDFLAGS) $^ -o $@ -lefi -lgnuefi
 	
-omos_kernel.elf.img: omos_krnl.o omos_kernel.o serial.o kernel/paging.o gfx/console.o fontppm.o
+omos_kernel.elf.img: omos_krnl.o omos_kernel.o \
+	serial.o kernel/paging.o gfx/console.o fontppm.o \
+	kernel/interrupts.o kernel/keyboard_handler.o kernel/kbrd_handler.o
+
 	ld -T kernel/kernel.ld -o $@ $^
 
 omos_kernel.img: omos_kernel.elf.img

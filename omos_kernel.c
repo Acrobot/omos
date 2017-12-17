@@ -1,4 +1,5 @@
 #include "kernel/kernel.h"
+#include "kernel/interrupts.h"
 #include "serial.h"
 #include "gfx/console.h"
 
@@ -35,6 +36,8 @@ void kernel_main(kernel_params *params) {
     } else {
         console_print("Getting time failed!");
     }
+    
+    enable_interrupts();
     
     for(;;);
 }
